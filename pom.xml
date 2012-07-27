@@ -8,7 +8,13 @@
   <packaging>jar</packaging>
 
   <name>TangAuth</name>
-  <url>http://github.com/tangerinagames/TangAuth</url>
+  <url>http://github.com/tangerinagames/tangauth</url>
+
+  <scm>
+    <connection>scm:git:git@github.com:tangerinagames/tangauth.git</connection>
+    <url>scm:git:git@github.com:tangerinagames/tangauth.git</url>
+    <developerConnection>scm:git:git@github.com:tangerinagames/tangauth.git</developerConnection>
+  </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -35,4 +41,15 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.3.2</version>
+      </plugin>
+    </plugins>
+  </build>
+  
 </project>
