@@ -1,0 +1,6 @@
+database:
+  username: tangauth
+  isolation: SERIALIZABLE
+  driver: org.sqlite.JDBC
+  password: tangauth
+  url: jdbc:sqlite:data/tangauth.db
