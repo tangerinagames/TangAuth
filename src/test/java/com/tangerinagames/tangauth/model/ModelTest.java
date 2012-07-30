@@ -11,7 +11,8 @@ import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class ModelTest {
@@ -48,7 +49,7 @@ public class ModelTest {
 
     @Test
     public void shouldFindAModel() {
-        int key = 1;
+        long key = 1;
         FakeModel model = new FakeModel();
         when(database.find(FakeModel.class, key)).thenReturn(model);
 

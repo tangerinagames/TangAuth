@@ -27,7 +27,7 @@ public abstract class Model {
         return database.createEntityBean(clazz);
     }
 
-    protected static Object find(Class<? extends Model> clazz, int key) {
+    protected static Object find(Class<? extends Model> clazz, long key) {
         return database.find(clazz, key);
     }
 
