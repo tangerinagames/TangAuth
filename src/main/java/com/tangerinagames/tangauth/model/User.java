@@ -1,12 +1,16 @@
 package com.tangerinagames.tangauth.model;
 
-import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.*;
+import com.avaje.ebean.Query;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="users")
+@NamedQueries({
+    @NamedQuery(name="findByUserName", query="SELECT u FROM User u WHERE lower(u.userName) = lower(:userName)")
+})
 public class User extends Model {
 
     @Column(name="user_name")
@@ -53,5 +57,11 @@ public class User extends Model {
 
     public static User find(long key) {
         return (User) find(User.class, key);
+    }
+
+    public static User findByUserName(String userName) {
+        Query<User> query = database.createNamedQuery(User.class, "findByUserName");
+        query.setParameter("userName", userName);
+        return query.findUnique();
     }
 }
