@@ -6,9 +6,11 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import javax.persistence.Entity;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.verifyStatic;
@@ -20,6 +22,16 @@ public class UserTest {
     @Before
     public void setUp() {
         mockStatic(Model.class);
+    }
+
+    @Test
+    public void shouldBeAModel() {
+        assertEquals(Model.class, User.class.getSuperclass());
+    }
+
+    @Test
+    public void shouldBeAEntity() {
+        assertTrue(User.class.isAnnotationPresent(Entity.class));
     }
 
     @Test
