@@ -1,15 +1,17 @@
 package com.tangerinagames.tangauth.model;
 
 import com.avaje.ebean.EbeanServer;
+import com.tangerinagames.tangauth.security.Crypt;
 
 import javax.persistence.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
 @Entity
 @Table(name="users")
 public class User {
 
-    protected static EbeanServer database;
+    private static EbeanServer database;
 
     @Id
     private Integer id;
@@ -60,10 +62,10 @@ public class User {
         database.save(this);
     }
 
-    public static User create(String userName, String password, Date lastLogin) {
+    public static User create(String userName, String password, Date lastLogin) throws Exception {
         User user = (User) database.createEntityBean(User.class);
         user.setUserName(userName);
-        user.setPassword(password);
+        user.setPassword(Crypt.getInstance().encrypt(password));
         user.setLastLogin(lastLogin);
         return user;
     }

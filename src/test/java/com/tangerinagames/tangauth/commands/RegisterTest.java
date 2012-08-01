@@ -1,5 +1,6 @@
 package com.tangerinagames.tangauth.commands;
 
+import com.tangerinagames.tangauth.TangAuth;
 import com.tangerinagames.tangauth.model.User;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -39,7 +40,7 @@ public class RegisterTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         spy(User.class);
-        register = new Register();
+        register = new Register(new TangAuth());
     }
 
     @Test
@@ -72,7 +73,7 @@ public class RegisterTest {
     }
 
     @Test
-    public void shouldRegisterAPlayer() {
+    public void shouldRegisterAPlayer() throws Exception {
         String userName = "TangZero";
 
         when(player.getName()).thenReturn(userName);
