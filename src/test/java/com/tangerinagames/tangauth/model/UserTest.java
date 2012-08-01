@@ -1,48 +1,41 @@
 package com.tangerinagames.tangauth.model;
 
 import com.avaje.ebean.EbeanServer;
+import com.avaje.ebean.ExpressionList;
 import com.avaje.ebean.Query;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.MockitoAnnotations;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import java.lang.reflect.Field;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.doReturn;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Model.class)
 public class UserTest {
 
-    @Mock
-    private EbeanServer database;
-
-    @Mock
-    private Query<User> query;
-
-    @Mock
-    private User user;
+    @Mock private EbeanServer database;
+    @Mock private Query<User> query;
+    @Mock private ExpressionList<User> expression;
+    @Mock private User user;
 
     @Before
     public void setUp() {
-        spy(Model.class);
+        MockitoAnnotations.initMocks(this);
         User.setDatabase(database);
     }
 
     @Test
-    public void shouldBeAModel() {
-        assertEquals(Model.class, User.class.getSuperclass());
+    public void shouldHaveAIdField() throws NoSuchFieldException {
+        Field id = User.class.getDeclaredField("id");
+        assertTrue(id.isAnnotationPresent(Id.class));
     }
 
     @Test
@@ -52,8 +45,7 @@ public class UserTest {
 
     @Test
     public void shouldCreateAUser() {
-        doReturn(new User()).when(Model.class);
-        Model.create(User.class);
+        when(database.createEntityBean(User.class)).thenReturn(new User());
 
         String userName = "TangZero";
         String password = "1234";
@@ -65,28 +57,18 @@ public class UserTest {
         assertEquals(password, user.getPassword());
         assertEquals(lastLogin, user.getLastLogin());
 
-        verifyStatic();
-        Model.create(User.class);
-    }
-
-    @Test
-    public void shouldFindAUser() {
-        long key = 1;
-
-        doReturn(user).when(Model.class);
-        Model.find(User.class, key);
-
-        assertEquals(user, User.find(key));
+        verify(database).createEntityBean(User.class);
     }
 
     @Test
     public void shouldFindAUserByUserName() {
         String userName = "TangZero";
 
-        when(database.createNamedQuery(User.class, "findByUserName")).thenReturn(query);
-        when(query.findUnique()).thenReturn(user);
+        when(database.find(User.class)).thenReturn(query);
+        when(query.where()).thenReturn(expression);
+        when(expression.ieq("userName", userName)).thenReturn(expression);
+        when(expression.findUnique()).thenReturn(user);
 
         assertEquals(user, User.findByUserName(userName));
-        verify(query).setParameter("userName", userName);
     }
 }
