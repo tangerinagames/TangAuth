@@ -2,4 +2,12 @@ name: ${project.name}
 main: ${main.class}
 version: ${project.version}
 website: ${project.url}
-author: @tangzero
+author: TangZero
+
+database: true
+
+commands:
+
+  register:
+    description: Registers you.
+    usage: /<command> [password]
