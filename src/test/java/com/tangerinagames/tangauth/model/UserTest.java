@@ -6,8 +6,11 @@ import com.avaje.ebean.Query;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,9 +19,14 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.powermock.api.mockito.PowerMockito.doReturn;
+import static org.powermock.api.mockito.PowerMockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(User.class)
 public class UserTest {
 
     @Mock private EbeanServer database;
@@ -29,6 +37,7 @@ public class UserTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
+        spy(User.class);
         User.setDatabase(database);
     }
 
@@ -70,5 +79,20 @@ public class UserTest {
         when(expression.findUnique()).thenReturn(user);
 
         assertEquals(user, User.findByUserName(userName));
+    }
+
+    @Test
+    public void shouldDetermineIfUserExists() {
+        String userName = "TangZero";
+
+        doReturn(user).when(User.class);
+        User.findByUserName(userName);
+
+        assertTrue(User.exists(userName));
+
+        doReturn(null).when(User.class);
+        User.findByUserName(userName);
+
+        assertFalse(User.exists(userName));
     }
 }

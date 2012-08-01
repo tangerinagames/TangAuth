@@ -24,7 +24,7 @@ public class Register implements CommandExecutor {
         } else {
             Player player = (Player) sender;
 
-            if (User.findByUserName(player.getName()) != null) {
+            if (User.exists(player.getName())) {
                 sender.sendMessage(ChatColor.RED + "Already Registered");
 
             } else {

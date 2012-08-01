@@ -24,30 +24,21 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.spy;
 
-
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(User.class)
 public class RegisterTest {
 
     private Register register;
 
-    @Mock
-    private CommandSender sender;
-
-    @Mock
-    private Command command;
-
-    @Mock
-    private Player player;
-
-    @Mock
-    private User user;
+    @Mock private CommandSender sender;
+    @Mock private Command command;
+    @Mock private Player player;
+    @Mock private User user;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         spy(User.class);
-
         register = new Register();
     }
 
@@ -73,8 +64,8 @@ public class RegisterTest {
 
         when(player.getName()).thenReturn(userName);
 
-        doReturn(user).when(User.class);
-        User.findByUserName(userName);
+        doReturn(true).when(User.class);
+        User.exists(userName);
 
         assertFalse(register.onCommand(player, command, "", new String[] { "1234" }));
         verify(player).sendMessage(ChatColor.RED + "Already Registered");
@@ -86,8 +77,8 @@ public class RegisterTest {
 
         when(player.getName()).thenReturn(userName);
 
-        doReturn(null).when(User.class);
-        User.findByUserName(userName);
+        doReturn(false).when(User.class);
+        User.exists(userName);
 
         doReturn(user).when(User.class);
         User.create(anyString(), anyString(), any(Date.class));
